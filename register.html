@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Register</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card p-4 shadow">
+        <h3 class="text-center">User Registration</h3>
+
+        <form id="regForm">
+            <input type="text" id="name" class="form-control mb-3" placeholder="Name" required>
+            <input type="email" id="email" class="form-control mb-3" placeholder="Email" required>
+            <input type="password" id="password" class="form-control mb-3" placeholder="Password" required>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+
+        <a href="./data.html" class="btn btn-success mt-3 w-100">View Users</a>
+    </div>
+</div>
+
+<script>
+document.getElementById("regForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let name = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value.trim();
+
+    if (!name || !email || !password) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    let user = { name, email, password };
+
+    // Get existing users
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Add new user
+    users.push(user);
+
+    // Save back to localStorage
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // AJAX POST (dummy API)
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://jsonplaceholder.typicode.com/posts", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onload = function() {
+        if (xhr.status === 201) {
+            console.log("Data sent successfully");
+        }
+    };
+
+    xhr.send(JSON.stringify(user));
+
+    alert("User Registered Successfully!");
+
+    document.getElementById("regForm").reset();
+});
+</script>
+
+</body>
+</html>
